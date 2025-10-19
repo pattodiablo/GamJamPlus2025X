@@ -82,7 +82,7 @@ private float savedSpeedBeforeReverse;
 
     void Update()
     {
-        Debug.Log($"Speed: {currentSpeed:F2}, IsReversing: {isReversing}, Timer: {reverseTimer:F2}");
+       // Debug.Log($"Speed: {currentSpeed:F2}, IsReversing: {isReversing}, Timer: {reverseTimer:F2}");
         lastSpeed = currentSpeed;
 
         // Lógica de finalización del reverso y aceleración normal

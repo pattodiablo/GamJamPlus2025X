@@ -28,7 +28,7 @@ public class PlatformSpawner : MonoBehaviour
         // Verificar que el prefab esté asignado
         if (platformPrefab == null)
         {
-            Debug.LogError("❌ PlatformSpawner: No hay prefab asignado!");
+         
             return;
         }
         
@@ -37,7 +37,7 @@ public class PlatformSpawner : MonoBehaviour
         
         if (showDebugInfo)
         {
-            Debug.Log($"✅ PlatformSpawner iniciado - Límites X: ±{sceneLimitX:F2}, SpawnY: {spawnY}");
+           
         }
     }
 
@@ -64,7 +64,7 @@ public class PlatformSpawner : MonoBehaviour
             // Verificar que el prefab siga siendo válido
             if (platformPrefab == null)
             {
-                Debug.LogError("❌ PlatformSpawner: El prefab se perdió durante la ejecución!");
+               
                 yield break;
             }
             
@@ -79,7 +79,7 @@ public class PlatformSpawner : MonoBehaviour
                 // Verificar que es una instancia, no el prefab original
                 if (platform == platformPrefab)
                 {
-                    Debug.LogError("❌ Error crítico: Se está modificando el prefab original!");
+                 
                     yield break;
                 }
                 
@@ -107,13 +107,12 @@ public class PlatformSpawner : MonoBehaviour
                 
                 if (showDebugInfo)
                 {
-                    Debug.Log($"🟢 Plataforma #{platformsCreated} creada en ({randomX:F2}, {spawnY}) - Velocidad: {moveSpeed} - Escala: {platform.transform.localScale}");
-                    Debug.Log($"🔍 Instancia creada: {platform.name} (ID: {platform.GetInstanceID()})");
+                   
                 }
             }
             else
             {
-                Debug.LogError("❌ Error: Instantiate devolvió null!");
+               
             }
 
             float waitTime = Random.Range(minSpawnInterval, maxSpawnInterval);
@@ -127,7 +126,7 @@ public class PlatformSpawner : MonoBehaviour
         if (showDebugInfo && Time.time % 5f < Time.deltaTime)
         {
             int activePlatforms = FindObjectsOfType<PlatformMover>().Length;
-            Debug.Log($"📊 Stats - Creadas: {platformsCreated}, Activas: {activePlatforms}");
+         
         }
     }
     
@@ -144,7 +143,7 @@ public class PlatformSpawner : MonoBehaviour
         
         if (showDebugInfo)
         {
-            Debug.Log($"🎲 Escala aplicada: X={randomScaleX:F2}, Y={randomScaleY:F2}, Z={randomScaleZ:F2}");
+       
         }
     }
     
@@ -153,7 +152,7 @@ public class PlatformSpawner : MonoBehaviour
         Rigidbody rb = platform.GetComponent<Rigidbody>();
         if (rb == null)
         {
-            Debug.LogWarning($"⚠️ Plataforma {platform.name} no tiene Rigidbody! Agregándolo automáticamente...");
+          
             rb = platform.AddComponent<Rigidbody>();
             
             // Configuración básica
@@ -165,7 +164,7 @@ public class PlatformSpawner : MonoBehaviour
         
         if (showDebugInfo)
         {
-            Debug.Log($"🔧 Rigidbody verificado - UseGravity: {rb.useGravity}, Mass: {rb.mass}");
+           
         }
     }
 }

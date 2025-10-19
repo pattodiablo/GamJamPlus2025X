@@ -9,7 +9,7 @@ public class CheckCollision : MonoBehaviour
 
     private void OnCollisionEnter2D(Collision2D collision)
     {
-        UnityEngine.Debug.Log("Colisión detectada en CheckCollision.cs");
+       // UnityEngine.Debug.Log("Colisión detectada en CheckCollision.cs");
 
         if (!collision.collider.CompareTag("Player")) return;
 
@@ -18,21 +18,35 @@ public class CheckCollision : MonoBehaviour
 
       private void OnTriggerEnter2D(Collider2D other)
     {
-         UnityEngine.Debug.Log("Trigger detectado en CheckCollision.cs");
+        //  UnityEngine.Debug.Log("Trigger detectado en CheckCollision.cs");
 
 
         if (other.CompareTag("Player"))
         {
-             other.SendMessage("PlayerHurt", SendMessageOptions.DontRequireReceiver);
+            other.SendMessage("PlayerHurt", SendMessageOptions.DontRequireReceiver);
             if (doExplosionOnTrigger)
             {
-                UnityEngine.Debug.Log("Tratando de explotar");
+             
                 GetComponent<DoExplosion>()?.Explode(transform);
             }
         }
-           
 
-       
+        if (other.CompareTag("Amigo"))
+        {
+
+          var amigo = other.GetComponent<SalvarAmigo>();
+            bool isRescued = amigo != null && amigo.isRescued;
+
+            if (isRescued)
+            {
+                // Ya rescatado: no destruir ni explotar
+                return;
+            }
+
+            // No rescatado: destruir y (si quieres) explotar
+            amigo.SendMessage("AmigoDestroy", SendMessageOptions.DontRequireReceiver);
+            GetComponent<DoExplosion>()?.Explode(transform);
+        }
     }
 
 }

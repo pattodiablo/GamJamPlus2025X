@@ -5,63 +5,56 @@ public class MetthorCreator : MonoBehaviour
 {
     [Header("Spawn")]
     [SerializeField] private GameObject meteorPrefab;
-    [SerializeField] private float intervalMin = 1.0f;
-    [SerializeField] private float intervalMax = 2.5f;
 
     [Header("Placement")]
-    [SerializeField] private float topOffset = 1.0f;     // Aparece esta distancia por encima del borde superior
-    [SerializeField] private float xMargin = 0.3f;       // Margen lateral para no salir cortado
+    [SerializeField] private float topOffset = 1.0f;     // Distancia por encima del borde superior
+    [SerializeField] private float xMargin = 0.3f;       // Margen lateral
     [SerializeField] private Camera targetCamera;        // Si es null, usa Camera.main
 
     [Header("Velocity (opcional)")]
-    [SerializeField] private float initialDownSpeed = 0f; // Si > 0 y el meteor tiene Rigidbody2D, le da velocidad hacia abajo
+    [SerializeField] private float initialDownSpeed = 0f; // Si > 0, aplica velocidad hacia abajo
 
-    private Coroutine spawnRoutine;
+    [Header("Progresión y tasa (spawns/seg)")]
+    [SerializeField] private float startDelay = 0f;     // Retraso inicial
+    [SerializeField] private float minRate = 0.2f;      // Al inicio (spawns/seg)
+    [SerializeField] private float maxRate = 3f;        // Máximo (cap 3/seg)
+    [SerializeField] private float rampUpTime = 60f;    // Segundos para ir de minRate a maxRate
+    [SerializeField] private AnimationCurve rateCurve = AnimationCurve.Linear(0, 0, 1, 1);
 
-    private void OnEnable()
+    private float startTime;
+    private float spawnBudget;
+
+    private void Start()
     {
-        if (spawnRoutine == null)
-            spawnRoutine = StartCoroutine(SpawnLoop());
+        startTime = Time.time;
+        if (targetCamera == null) targetCamera = Camera.main;
+        maxRate = Mathf.Clamp(maxRate, 0.01f, 3f);
     }
 
-    private void OnDisable()
+    private void Update()
     {
-        if (spawnRoutine != null)
-        {
-            StopCoroutine(spawnRoutine);
-            spawnRoutine = null;
-        }
-    }
+        if (meteorPrefab == null || targetCamera == null || !targetCamera.orthographic) return;
 
-    private IEnumerator SpawnLoop()
-    {
-        while (true)
+        float elapsed = Time.time - startTime - startDelay;
+        if (elapsed < 0f) return;
+
+        float t = rampUpTime > 0f ? Mathf.Clamp01(elapsed / rampUpTime) : 1f;
+        float curveFactor = Mathf.Clamp01(rateCurve.Evaluate(t));
+
+        float currentRate = Mathf.Clamp(Mathf.Lerp(minRate, maxRate, curveFactor), 0f, 3f);
+
+        spawnBudget += currentRate * Time.deltaTime;
+
+        while (spawnBudget >= 1f)
         {
             SpawnOne();
-
-            float wait = (intervalMax > intervalMin)
-                ? Random.Range(intervalMin, intervalMax)
-                : intervalMin;
-
-            yield return new WaitForSeconds(wait);
+            spawnBudget -= 1f;
         }
     }
 
     private void SpawnOne()
     {
-        if (meteorPrefab == null)
-        {
-            Debug.LogWarning($"{name}: Asigna un prefab de Meteor en MetthorCreator.");
-            return;
-        }
-
-        var cam = targetCamera != null ? targetCamera : Camera.main;
-        if (cam == null || !cam.orthographic)
-        {
-            Debug.LogWarning($"{name}: Se requiere una cámara ortográfica (targetCamera o Camera.main).");
-            return;
-        }
-
+        var cam = targetCamera;
         Vector3 camPos = cam.transform.position;
         float halfHeight = cam.orthographicSize;
         float halfWidth = halfHeight * cam.aspect;
@@ -82,7 +75,7 @@ public class MetthorCreator : MonoBehaviour
 
         if (initialDownSpeed > 0f && meteor.TryGetComponent<Rigidbody2D>(out var rb))
         {
-            var v = rb.linearVelocity;            // corregido: velocity (no linearVelocity)
+            var v = rb.linearVelocity;
             v.y = -Mathf.Abs(initialDownSpeed);
             rb.linearVelocity = v;
         }
@@ -90,10 +83,9 @@ public class MetthorCreator : MonoBehaviour
 
     private void OnValidate()
     {
-        if (targetCamera == null)
-            targetCamera = Camera.main;
-        intervalMin = Mathf.Max(0.01f, intervalMin);
-        intervalMax = Mathf.Max(intervalMin, intervalMax);
+        if (targetCamera == null) targetCamera = Camera.main;
+        minRate = Mathf.Max(0f, minRate);
+        maxRate = Mathf.Clamp(maxRate, 0.01f, 3f);
         xMargin = Mathf.Max(0f, xMargin);
         topOffset = Mathf.Max(0f, topOffset);
     }

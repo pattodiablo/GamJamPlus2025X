@@ -13,7 +13,7 @@ public class PlatformMover : MonoBehaviour
         // Verificar que este objeto es una instancia, no un prefab
         if (gameObject.scene.name == null)
         {
-            Debug.LogError("❌ PlatformMover: Este componente está en un prefab, no en una instancia!");
+        
             return;
         }
         
@@ -22,7 +22,7 @@ public class PlatformMover : MonoBehaviour
         
         CalculateDestroyHeight();
         
-        Debug.Log($"🔧 PlatformMover iniciado en instancia: {gameObject.name} (ID: {gameObject.GetInstanceID()})");
+   
     }
 
     void SetupRigidbody()
@@ -30,7 +30,7 @@ public class PlatformMover : MonoBehaviour
         rb = GetComponent<Rigidbody>();
         if (rb == null)
         {
-            Debug.LogError("❌ PlatformMover: No se encontró Rigidbody en el prefab!");
+  
             return;
         }
         
@@ -45,7 +45,7 @@ public class PlatformMover : MonoBehaviour
         // Aplicar velocidad inicial hacia arriba
         rb.linearVelocity = Vector3.up * speed;
         
-        Debug.Log($"🔧 Rigidbody configurado - Velocidad inicial: {rb.linearVelocity}");
+
     }
 
     void CalculateDestroyHeight()
@@ -67,11 +67,11 @@ public class PlatformMover : MonoBehaviour
             }
             
             initialized = true;
-            Debug.Log($"🔧 PlatformMover: Altura de destrucción calculada = {destroyHeight:F2}");
+       
         }
         else
         {
-            Debug.LogError("❌ PlatformMover: No se encontró Camera.main!");
+         
         }
     }
 
@@ -89,7 +89,7 @@ public class PlatformMover : MonoBehaviour
         // Verificar si debe destruirse
         if (transform.position.y > destroyHeight)
         {
-            Debug.Log($"🗑️ Plataforma destruida - Salió de escena en Y = {transform.position.y:F2} (Límite: {destroyHeight:F2})");
+     
             Destroy(gameObject);
         }
     }
@@ -101,7 +101,7 @@ public class PlatformMover : MonoBehaviour
         if (rb != null)
         {
             rb.linearVelocity = new Vector3(rb.linearVelocity.x, speed, rb.linearVelocity.z);
-            Debug.Log($"🔧 Velocidad cambiada a: {speed}");
+         
         }
     }
 }

@@ -1,3 +1,4 @@
+using System.Collections;
 using System.Diagnostics;
 using System.Security.Claims;
 using UnityEngine;
@@ -27,11 +28,20 @@ public class PlayerController2D : MonoBehaviour
     public string joyPowerParam = "JoyPower"; // Nombre del parámetro float en el Animator
     [Range(0f, 1f)] public float joyThresholdDown = 0.5f; // Umbral de activación hacia abajo
     
+    [Header("Hurt Settings")]
+    [SerializeField] private string hitBoolParam = "GotHit";
+    [SerializeField] private float hitFlagTime = 0.6f;
+    private Coroutine hitRoutine;
+
     private Rigidbody2D rb;
     private Vector2 currentVelocity = Vector2.zero;
     private Vector2 inputVector = Vector2.zero;
     private Vector3 initialPosition;
     private float floatTimer = 0f;
+
+    [Header("Movement Restriction")]
+    public bool restrictYMovement = true;    // Si true, bloquea movimiento en Y
+
 
     void Start()
     {
@@ -66,13 +76,32 @@ public class PlayerController2D : MonoBehaviour
             }
         }
     }
+
+    void AddPoints(int points)
+    {
+        // Aquí puedes agregar la lógica para sumar puntos al puntaje del jugador
+        UnityEngine.Debug.Log($"Puntos añadidos: {points}");
+    }
     
     void PlayerHurt()
     {
-      
-        // Aquí puedes manejar lo que sucede cuando el jugador es herido
-        UnityEngine.Debug.Log("Player has been hurt!"); 
+        animator = GetComponent<Animator>();
+        if (animator == null) animator = GetComponentInChildren<Animator>();
+
+        if (hitRoutine != null) StopCoroutine(hitRoutine);
+
+        animator.SetBool(hitBoolParam, true);
+        hitRoutine = StartCoroutine(ClearHitFlagAfter(hitFlagTime));
+
     }
+
+    private IEnumerator ClearHitFlagAfter(float delay)
+    {
+        yield return new WaitForSeconds(delay);
+        if (animator != null) animator.SetBool(hitBoolParam, false); // Cambia a true si así lo necesitas
+        hitRoutine = null;
+    }
+
     void Update()
     {
         // Obtener input del joystick virtual
@@ -146,8 +175,15 @@ public class PlayerController2D : MonoBehaviour
             currentVelocity = Vector2.Lerp(currentVelocity, Vector2.zero, deceleration * Time.fixedDeltaTime);
         }
         
-        // Aplicar la velocidad al Rigidbody
-        rb.linearVelocity = new Vector2(currentVelocity.x, rb.linearVelocity.y + currentVelocity.y);
+         // Aplicar la velocidad al Rigidbody
+        if (restrictYMovement)
+        {
+            rb.linearVelocity = new Vector2(currentVelocity.x, 0f); // bloquea Y
+        }
+        else
+        {
+            rb.linearVelocity = new Vector2(currentVelocity.x, rb.linearVelocity.y * 0.5f + currentVelocity.y); // antes: linearVelocity
+        }
     }
     
     void ApplySpaceGravity()

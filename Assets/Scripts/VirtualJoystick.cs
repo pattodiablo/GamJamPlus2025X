@@ -14,6 +14,9 @@ public class VirtualJoystick : MonoBehaviour, IPointerDownHandler, IPointerUpHan
     
     [Header("Output")]
     public Vector2 inputVector = Vector2.zero; // Vector de entrada (-1 a 1 en X e Y)
+
+    [Header("Touch Area")]
+    [SerializeField] private RectTransform touchArea; // Panel full-screen que recibe los toques
     
     private bool isDragging = false;
     private Vector2 centerPosition;
@@ -40,6 +43,30 @@ public class VirtualJoystick : MonoBehaviour, IPointerDownHandler, IPointerUpHan
     public void OnPointerDown(PointerEventData eventData)
     {
         isDragging = true;
+
+        // Usa el touchArea si está asignado; si no, el padre del background
+        var refRect = touchArea != null ? touchArea : (joystickBackground != null ? joystickBackground.parent as RectTransform : null);
+        if (joystickBackground != null && refRect != null &&
+            RectTransformUtility.ScreenPointToLocalPointInRectangle(refRect, eventData.position, eventData.pressEventCamera, out var localTouch))
+        {
+            // Convertir al espacio del padre del background
+            if (joystickBackground.parent == refRect)
+            {
+                joystickBackground.anchoredPosition = localTouch;
+            }
+            else
+            {
+                // Convertir desde refRect al espacio del padre real del background
+                Vector2 bgLocal;
+                RectTransformUtility.ScreenPointToLocalPointInRectangle(joystickBackground.parent as RectTransform, eventData.position, eventData.pressEventCamera, out bgLocal);
+                joystickBackground.anchoredPosition = bgLocal;
+            }
+        }
+
+        if (joystickHandle != null)
+            joystickHandle.anchoredPosition = Vector2.zero;
+
+        // Genera input inmediato desde el primer toque
         OnDrag(eventData);
     }
     

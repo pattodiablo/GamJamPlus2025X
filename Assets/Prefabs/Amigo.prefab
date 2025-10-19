@@ -178,6 +178,11 @@ PrefabInstance:
       insertIndex: -1
       addedObject: {fileID: 2728807699743026781}
   m_SourcePrefab: {fileID: 4843985084834002234, guid: 161afbe61e42944508079955c721efb8, type: 3}
+--- !u!1 &5621763456190974302 stripped
+GameObject:
+  m_CorrespondingSourceObject: {fileID: -6736650475557722331, guid: 161afbe61e42944508079955c721efb8, type: 3}
+  m_PrefabInstance: {fileID: 7819964218331065979}
+  m_PrefabAsset: {fileID: 0}
 --- !u!1 &7737702964080267206 stripped
 GameObject:
   m_CorrespondingSourceObject: {fileID: -8653719598885068355, guid: 161afbe61e42944508079955c721efb8, type: 3}
@@ -293,6 +298,11 @@ MonoBehaviour:
   animator: {fileID: 7000888980537488669}
   disappearHorizontalSpeed: 0.5
   magicShield: {fileID: 5769946650511020920}
+  isRescued: 0
+  puntuacionText: {fileID: 0}
+  puntuacionTMP: {fileID: 0}
+  autoFindPuntuacionText: 1
+  Fondo: {fileID: 5621763456190974302}
 --- !u!4 &8910879894367803301 stripped
 Transform:
   m_CorrespondingSourceObject: {fileID: -7552582706839291426, guid: 161afbe61e42944508079955c721efb8, type: 3}

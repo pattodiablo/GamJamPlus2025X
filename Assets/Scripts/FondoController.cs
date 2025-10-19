@@ -47,7 +47,7 @@ public class VerticalBackgroundScroll : MonoBehaviour
         // Buscar PlayerController2D automáticamente si no está asignado
         if (playerController == null)
         {
-            playerController = FindObjectOfType<PlayerController2D>();
+            playerController = Object.FindFirstObjectByType<PlayerController2D>();
             
             if (playerController == null)
             {
@@ -60,7 +60,7 @@ public class VerticalBackgroundScroll : MonoBehaviour
 // Buscar VirtualJoystick automáticamente si no está asignado
         if (virtualJoystick == null)
         {
-            virtualJoystick = FindObjectOfType<VirtualJoystick>();
+            virtualJoystick = Object.FindFirstObjectByType<VirtualJoystick>();
             
             if (virtualJoystick == null)
             {

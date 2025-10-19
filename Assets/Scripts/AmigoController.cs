@@ -1,4 +1,6 @@
 using UnityEngine;
+using System.Collections;
+
 
 public class AmigoController : MonoBehaviour
 {
@@ -27,6 +29,9 @@ public class AmigoController : MonoBehaviour
         startTime = Time.time;
         if (targetCamera == null) targetCamera = Camera.main;
         maxRate = Mathf.Clamp(maxRate, 0.01f, 3f); // nunca superar 3/seg
+
+       
+
     }
 
     void Update()
@@ -69,7 +74,13 @@ public class AmigoController : MonoBehaviour
         Vector3 spawnPos = new Vector3(x, y, 0f);
 
         Instantiate(amigoPrefab, spawnPos, Quaternion.identity);
+
+       
+
+
     }
+
+    
 
     private void OnValidate()
     {

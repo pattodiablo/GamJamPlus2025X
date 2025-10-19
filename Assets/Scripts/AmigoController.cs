@@ -20,10 +20,6 @@ public class AmigoController : MonoBehaviour
     [SerializeField] private AnimationCurve rateCurve = AnimationCurve.Linear(0, 0, 1, 1);
     // La curva define cómo progresa entre 0..1 de tiempo normalizado
 
-    [Header("Audio Amigo")]
-    [SerializeField] private AudioSource spawnSoundAmigo;
-    //[SerializeField] private float delayPlay;
-
     private float startTime;
     private float spawnBudget; // Acumula “spawns fraccionarios” (método estable por frame)
     
@@ -34,7 +30,7 @@ public class AmigoController : MonoBehaviour
         if (targetCamera == null) targetCamera = Camera.main;
         maxRate = Mathf.Clamp(maxRate, 0.01f, 3f); // nunca superar 3/seg
 
-        //StartCoroutine(ExecuteAfterDelay());
+       
 
     }
 
@@ -79,17 +75,12 @@ public class AmigoController : MonoBehaviour
 
         Instantiate(amigoPrefab, spawnPos, Quaternion.identity);
 
-        spawnSoundAmigo.Play();
+       
 
 
     }
 
-    /*IEnumerator ExecuteAfterDelay()
-    {
-        yield return new WaitForSeconds(delayPlay);
-        Debug.Log("suena");
-        spawnSoundAmigo.Play();
-    }*/
+    
 
     private void OnValidate()
     {

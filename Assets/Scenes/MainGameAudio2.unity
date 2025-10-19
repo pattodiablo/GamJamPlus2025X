@@ -151,6 +151,7 @@ MonoBehaviour:
   joyThresholdDown: 0.4
   hitBoolParam: GotHit
   hitFlagTime: 0.6
+  energyCounter: {fileID: 0}
   restrictYMovement: 0
 --- !u!114 &96970097
 MonoBehaviour:
@@ -1081,7 +1082,6 @@ MonoBehaviour:
     m_PreInfinity: 2
     m_PostInfinity: 2
     m_RotationOrder: 4
-  spawnSoundAmigo: {fileID: 2976685293739055128}
 --- !u!4 &1460768460
 Transform:
   m_ObjectHideFlags: 0
@@ -1869,11 +1869,6 @@ PrefabInstance:
     m_AddedGameObjects: []
     m_AddedComponents: []
   m_SourcePrefab: {fileID: 100100000, guid: d949664d6e989034284481a1a766afb1, type: 3}
---- !u!82 &2976685293739055128 stripped
-AudioSource:
-  m_CorrespondingSourceObject: {fileID: 7839454025145110167, guid: d949664d6e989034284481a1a766afb1, type: 3}
-  m_PrefabInstance: {fileID: 2976685293739055127}
-  m_PrefabAsset: {fileID: 0}
 --- !u!4 &2976685293739055129 stripped
 Transform:
   m_CorrespondingSourceObject: {fileID: 6051769876752317547, guid: d949664d6e989034284481a1a766afb1, type: 3}
@@ -1929,6 +1924,10 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 4194081510099098340, guid: 4b7a980a392e663479ea55b899b24a64, type: 3}
       propertyPath: m_LocalEulerAnglesHint.z
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 8805161600796041881, guid: 4b7a980a392e663479ea55b899b24a64, type: 3}
+      propertyPath: m_PlayOnAwake
       value: 0
       objectReference: {fileID: 0}
     m_RemovedComponents: []

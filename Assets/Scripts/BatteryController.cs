@@ -6,6 +6,7 @@ public class BatteryController : MonoBehaviour
     [SerializeField] private bool randomizeDirection = true;
 
     [SerializeField] private GameObject rayAnimationsPrefab; // <- Prefab de rayos a instanciar
+    [SerializeField] private AudioSource tomarBateria;
 
     // 1 = horario (derecha), -1 = antihorario (izquierda)
     private int direction = 1;
@@ -27,7 +28,10 @@ public class BatteryController : MonoBehaviour
     {
    if (!other.CompareTag("Player")) return;
 
+            
         var energy = other.GetComponentInParent<PlayerController2D>(); // o tu script real
+        tomarBateria.Play();
+
         if (energy != null)
         {
             energy.AddBattery(1); // ajusta al método real

@@ -1,5 +1,6 @@
 
 using UnityEngine;
+using System.Collections;
 
 
 public class SalvarAmigo : MonoBehaviour
@@ -21,6 +22,10 @@ public class SalvarAmigo : MonoBehaviour
     [Header("Energy lookup")]
     [SerializeField] private string canvasName = "UICanvas"; // opcional: nombre del Canvas
     [SerializeField] private string canvasTag = "";          // opcional: tag del Canvas
+
+    [Header("Audio Amiwi")]
+    [SerializeField] private AudioSource AmigoSpawn;
+    [SerializeField] private AudioSource gracias;
 
     void Awake()
     {
@@ -54,13 +59,13 @@ public class SalvarAmigo : MonoBehaviour
         float yAng = transform.eulerAngles.y % 360f;
         rotatedY180 = Mathf.Abs(Mathf.DeltaAngle(yAng, 180f)) < 1f;
 
-         Invoke(nameof(PlaySpawnAudio), 4f);
+         Invoke(nameof(PlaySpawnAudio), 3f);
     }
 
      private void PlaySpawnAudio()
     {
        Debug.LogWarning("Va a sonar audio de spawn amigo");
-        // AudioManager.Instance.PlaySound("AmigoSpawn");
+        AmigoSpawn.Play();
     }
 
     private void OnTriggerEnter2D(Collider2D other)
@@ -70,6 +75,7 @@ public class SalvarAmigo : MonoBehaviour
         int energyValue = energyCounter != null ? energyCounter.currentEnergy : 0;
         if (energyCounter == null)
             Debug.LogWarning("EnergyCounter no encontrado. Asigna en la instancia en escena o ajusta canvasName/canvasTag.");
+            gracias.Play();
 
         if (energyValue > 0)
         {

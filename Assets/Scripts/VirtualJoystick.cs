@@ -44,6 +44,7 @@ public class VirtualJoystick : MonoBehaviour, IPointerDownHandler, IPointerUpHan
     {
         isDragging = true;
 
+       
 
         // Genera input inmediato desde el primer toque
         OnDrag(eventData);

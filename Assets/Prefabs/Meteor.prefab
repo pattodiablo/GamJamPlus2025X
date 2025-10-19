@@ -126,6 +126,7 @@ GameObject:
   - component: {fileID: 5217929363087677442}
   - component: {fileID: 564979696463042471}
   - component: {fileID: 7380244802177800844}
+  - component: {fileID: 5311202878021156133}
   m_Layer: 0
   m_Name: Meteor
   m_TagString: Untagged
@@ -265,6 +266,8 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: c47fb4adfbb184e15861a84a2fe78ab3, type: 3}
   m_Name: 
   m_EditorClassIdentifier: '::'
+  doExplosionOnCollision: 0
+  doExplosionOnTrigger: 1
 --- !u!50 &7380244802177800844
 Rigidbody2D:
   serializedVersion: 5
@@ -292,3 +295,17 @@ Rigidbody2D:
   m_SleepingMode: 1
   m_CollisionDetection: 0
   m_Constraints: 0
+--- !u!114 &5311202878021156133
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 7785707172748175227}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 6f4cfe69ba9654b648124bf679d6bcd1, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: Assembly-CSharp::DoExplosion
+  destroySelf: 1
+  explodePrefab: {fileID: 846857919778172722, guid: cee19feb0082b422cba13f87a179067c, type: 3}

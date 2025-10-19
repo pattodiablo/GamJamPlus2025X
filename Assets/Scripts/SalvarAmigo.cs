@@ -41,6 +41,16 @@ public class SalvarAmigo : MonoBehaviour
     [Tooltip("Sincronizar velocidad con el fondo")]
     public bool syncWithBackground = true;
 
+    [Header("Destruction Settings")]
+    [Tooltip("Margen extra para destrucción fuera de pantalla")]
+    public float destructionMargin = 2f;
+
+    // Variables para los límites de destrucción
+    private float destroyTopY;
+    private float destroyBottomY;
+    private float destroyLeftX;
+    private float destroyRightX;
+
     void Awake()
     {
         if (energyCounter == null)
@@ -64,6 +74,9 @@ public class SalvarAmigo : MonoBehaviour
         magicShield.SetActive(false);
         animator = GetComponent<Animator>();
         rb = GetComponent<Rigidbody2D>();
+
+        // Calcular límites de destrucción basados en la cámara
+        CalculateDestructionBounds();
 
         // Configuración inicial del Rigidbody
         if (speedFondo != null && syncWithBackground)
@@ -101,6 +114,46 @@ public class SalvarAmigo : MonoBehaviour
         Invoke(nameof(PlaySpawnAudio), 4f);
     }
 
+    void CalculateDestructionBounds()
+    {
+        Camera cam = Camera.main;
+        if (cam != null)
+        {
+            if (cam.orthographic)
+            {
+                // Cámara ortográfica
+                float camHeight = cam.orthographicSize;
+                float camWidth = camHeight * cam.aspect;
+
+                destroyTopY = camHeight + destructionMargin;
+                destroyBottomY = -camHeight - destructionMargin;
+                destroyLeftX = -camWidth - destructionMargin;
+                destroyRightX = camWidth + destructionMargin;
+            }
+            else
+            {
+                // Cámara perspectiva
+                float distance = Mathf.Abs(cam.transform.position.z - transform.position.z);
+                Vector3 corner = cam.ViewportToWorldPoint(new Vector3(1, 1, distance));
+                
+                destroyTopY = corner.y + destructionMargin;
+                destroyBottomY = -corner.y - destructionMargin;
+                destroyLeftX = -corner.x - destructionMargin;
+                destroyRightX = corner.x + destructionMargin;
+            }
+
+          //  Debug.Log($"🎯 Límites de destrucción calculados - Top: {destroyTopY:F1}, Bottom: {destroyBottomY:F1}, Left: {destroyLeftX:F1}, Right: {destroyRightX:F1}");
+        }
+        else
+        {
+            // Valores por defecto si no hay cámara
+            destroyTopY = 15f;
+            destroyBottomY = -15f;
+            destroyLeftX = -10f;
+            destroyRightX = 10f;
+        }
+    }
+
     void FixedUpdate()
     {
         // Sincronizar velocidad con el fondo continuamente
@@ -108,8 +161,39 @@ public class SalvarAmigo : MonoBehaviour
         {
             // Igualar la velocidad del Rigidbody a la velocidad del fondo (hacia arriba)
             float fondoSpeed = speedFondo.GetCurrentSpeed();
-            rb.linearVelocity = new Vector2(rb.linearVelocity.x, fondoSpeed*0.1f);
+            rb.linearVelocity = new Vector2(rb.linearVelocity.x, fondoSpeed*0.05f);
         }
+
+        // Verificar si está fuera de los límites de la escena
+        CheckBounds();
+    }
+
+    void CheckBounds()
+    {
+        Vector3 pos = transform.position;
+
+        // Verificar si está fuera de cualquier límite
+        if (pos.y > destroyTopY || pos.y < destroyBottomY || 
+            pos.x < destroyLeftX || pos.x > destroyRightX)
+        {
+            DestroyOutOfBounds();
+        }
+    }
+
+    void DestroyOutOfBounds()
+    {
+        Vector3 pos = transform.position;
+        string direction = "";
+
+        // Determinar en qué dirección salió
+        if (pos.y > destroyTopY) direction = "arriba";
+        else if (pos.y < destroyBottomY) direction = "abajo";
+        else if (pos.x < destroyLeftX) direction = "izquierda";
+        else if (pos.x > destroyRightX) direction = "derecha";
+
+        Debug.Log($"🗑️ Amigo destruido por salir de pantalla ({direction}) - Posición: {pos}");
+        
+        Destroy(gameObject);
     }
 
     private void PlaySpawnAudio()
@@ -190,4 +274,12 @@ public class SalvarAmigo : MonoBehaviour
     {
         syncWithBackground = sync;
     }
+
+    // Método público para obtener los límites de destrucción
+    public Vector4 GetDestructionBounds()
+    {
+        return new Vector4(destroyLeftX, destroyBottomY, destroyRightX, destroyTopY);
+    }
+
+    
 }

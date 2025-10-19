@@ -25,7 +25,7 @@ public class SalvarAmigo : MonoBehaviour
 
     [Header("Audio Amiwi")]
     [SerializeField] private AudioSource AmigoSpawn;
-    [SerializeField] private AudioSource gracias;
+    //[SerializeField] private AudioSource gracias;
 
     void Awake()
     {
@@ -75,7 +75,7 @@ public class SalvarAmigo : MonoBehaviour
         int energyValue = energyCounter != null ? energyCounter.currentEnergy : 0;
         if (energyCounter == null)
             Debug.LogWarning("EnergyCounter no encontrado. Asigna en la instancia en escena o ajusta canvasName/canvasTag.");
-            gracias.Play();
+           
 
         if (energyValue > 0)
         {
@@ -83,6 +83,7 @@ public class SalvarAmigo : MonoBehaviour
             other.SendMessage("UseBattery", 1, SendMessageOptions.DontRequireReceiver);
             animator.SetBool("IsRecued", true);
             isRescued = true;
+            //gracias.Play();
             desaparecer();
         }
     }

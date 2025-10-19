@@ -80,7 +80,7 @@ public class PlayerController2D : MonoBehaviour
     void AddPoints(int points)
     {
         // Aquí puedes agregar la lógica para sumar puntos al puntaje del jugador
-        UnityEngine.Debug.Log($"Puntos añadidos: {points}");
+      //  UnityEngine.Debug.Log($"Puntos añadidos: {points}");
     }
     
     void PlayerHurt()

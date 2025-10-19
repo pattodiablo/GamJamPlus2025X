@@ -1,134 +1,256 @@
-using System;
 using UnityEngine;
 
 public class VerticalBackgroundScroll : MonoBehaviour
 {
+    [Header("Player Connection")]
+    [Tooltip("Referencia al PlayerController2D")]
+    public PlayerController2D playerController;
+
+    [Tooltip("Referencia al VirtualJoystick")]
+    public VirtualJoystick virtualJoystick;
+
     [Header("Movimiento")]
-    public float initialSpeed = 1f;       // velocidad inicial
-    public float acceleration = 1f;     // aceleración normal
+    [Tooltip("Aceleración por segundo")]
+    public float acceleration = 1000f;
+    
+    [Tooltip("Velocidad máxima que puede alcanzar")]
+    public float maxSpeed = 50f;
 
-    [Header("Player Reference")]
-    [SerializeField] private PlayerController playerController;
+    [Header("Player Velocity")]
+    [Tooltip("Multiplicador para la velocidad actual del player")]
+    public float currentVelocityMultiplier = 1f;
+    
+    [Tooltip("Multiplicador para la linear velocity del player (para uso futuro)")]
+    public float linearVelocityMultiplier = 1f;
 
+    [Header("Debug")]
+    [Tooltip("Mostrar información de velocidad en consola")]
+    public bool showDebugInfo = false;
+
+    // Variables privadas
     private float currentSpeed;
     private Transform bg1;
-public float reverseMultiplier = -0.5f; // factor de velocidad invertida (puedes usar -1 para invertir totalmente)
-
-    public float lastSpeed;
     private Transform bg2;
-    private float currentAcceleration;
-private float savedSpeedBeforeReverse;
-    private bool isReversing = false;
     private float backgroundHeight;
-    private float reverseTimer = 0f;
-    public float reverseDuration = 1f; // duración del efecto de reverso en segundos
+    
+    // Variables para almacenar velocidades del player
+    private float playerCurrentVelocityY;
+    private float playerLinearVelocityY;
 
     void Start()
     {
-        //Debug.Log(acceleration);
-        currentSpeed = initialSpeed;
-        currentAcceleration = acceleration;
+        InitializeBackground();
+    }
 
+    void InitializeBackground()
+    {
+        // Buscar PlayerController2D automáticamente si no está asignado
+        if (playerController == null)
+        {
+            playerController = FindObjectOfType<PlayerController2D>();
+            
+            if (playerController == null)
+            {
+                Debug.LogError("❌ FondoController: No se encontró PlayerController2D en la escena");
+                currentSpeed = 1f; // Velocidad por defecto si no hay player
+            }
+        }
+
+
+// Buscar VirtualJoystick automáticamente si no está asignado
+        if (virtualJoystick == null)
+        {
+            virtualJoystick = FindObjectOfType<VirtualJoystick>();
+            
+            if (virtualJoystick == null)
+            {
+                Debug.LogError("❌ FondoController: No se encontró VirtualJoystick en la escena");
+            }
+        }
+        // Inicializar velocidad con la currentVelocity del player
+        UpdatePlayerVelocities();
+        currentSpeed = Mathf.Abs(playerLinearVelocityY * currentVelocityMultiplier);
+        
+        // Si la velocidad inicial es muy baja, usar un mínimo
+        if (currentSpeed < 0.5f)
+        {
+            currentSpeed = 1f;
+        }
+
+        // Obtener los dos fondos hijos
         bg1 = transform.GetChild(0);
         bg2 = transform.GetChild(1);
 
-        // Calcula altura real del sprite
+        // Calcular altura real del sprite
         SpriteRenderer sr = bg1.GetComponent<SpriteRenderer>();
         backgroundHeight = sr.bounds.size.y;
 
-        // Posiciona bg2 debajo de bg1
+        // Posicionar bg2 debajo de bg1 para scroll infinito
         bg2.position = new Vector3(bg1.position.x, bg1.position.y - backgroundHeight, bg1.position.z);
 
-        // Suscribirse al evento de colisión del player
-        if (playerController != null)
+        if (showDebugInfo)
         {
-            playerController.OnPlayerCollision.AddListener(OnPlayerCollisionTriggered);
-        
-        }
-        else
-        {
-      
-            // Intentar encontrar el PlayerController automáticamente
-            playerController = FindFirstObjectByType<PlayerController>();
-            if (playerController != null)
-            {
-                playerController.OnPlayerCollision.AddListener(OnPlayerCollisionTriggered);
-            
-            }
-            else
-            {
-                Debug.LogError("❌ No se encontró ningún PlayerController en la escena");
-            }
-        }
-    }
-
-    private void OnPlayerCollisionTriggered()
-    {
-        
-        if (!isReversing)
-        {
-            isReversing = true;
-            reverseTimer = 0f; // reinicia el timer
-            savedSpeedBeforeReverse = currentSpeed;     // guarda la velocidad antes del cambio
-          
-            currentSpeed *= reverseMultiplier;          // invierte la velocidad (por ejemplo, la hace negativa)
-        
-        }
-        else
-        {
-          //  Debug.Log("Ya estaba en reverso, ignorando evento");
+            Debug.Log($"✅ VerticalBackgroundScroll inicializado:");
+            Debug.Log($"   Player conectado: {playerController != null}");
+            Debug.Log($"   Velocidad inicial (currentVelocity): {currentSpeed}");
+            Debug.Log($"   Aceleración: {acceleration}");
+            Debug.Log($"   Velocidad máxima: {maxSpeed}");
+            Debug.Log($"   Altura del fondo: {backgroundHeight}");
         }
     }
 
     void Update()
     {
-    
-        lastSpeed = currentSpeed;
+        UpdatePlayerVelocities();
+        UpdateSpeed();
+        MoveBackground();
+        HandleInfiniteScroll();
+    }
 
-        // Lógica de finalización del reverso y aceleración normal
-        if (!isReversing)
+    void UpdatePlayerVelocities()
+    {
+        if (playerController == null) return;
+
+
+        // Obtener linearVelocity.y del Rigidbody2D del player
+        Rigidbody2D playerRb = playerController.GetComponent<Rigidbody2D>();
+        if (playerRb != null)
         {
-            // sigue acelerando normalmente hacia arriba
-            currentSpeed += acceleration * Time.deltaTime;
+            playerLinearVelocityY = playerRb.linearVelocity.y;
+        }
+
+        if (showDebugInfo && Time.frameCount % 120 == 0) // Cada 2 segundos aprox
+        {
+            Debug.Log($"📊  LinearVelocity.y: {playerLinearVelocityY:F2}");
+        }
+    }
+
+    void UpdateSpeed()
+    {
+        // Usar currentVelocity del player como base para la velocidad del fondo
+        float playerInfluence = Mathf.Abs(playerLinearVelocityY * currentVelocityMultiplier);
+
+        // Acelerar normalmente
+        
+
+        if (virtualJoystick.inputVector.y < -0.1f)
+        {
+            currentSpeed = 100f ;
         }
         else
         {
-            // Contar tiempo de reverso
-            reverseTimer += Time.deltaTime;
-            
-            // Terminar reverso después de la duración especificada
-            if (reverseTimer >= reverseDuration)
-            {
-                isReversing = false;
-                reverseTimer = 0f;
-           
-                // recupera la velocidad donde se quedó antes de la reversa
-                currentSpeed = savedSpeedBeforeReverse * 0.25f; // Reducción más drástica del 75%
-             
-            }
+            currentSpeed = 10f; //+ (500f * acceleration * Time.deltaTime);
         }
 
         
+        // Debug de velocidad actual sin spam
+        if (showDebugInfo && Time.frameCount % 60 == 0) // Cada segundo aprox
+        {
+            Debug.Log($"🚀 Velocidad actual: {currentSpeed:F2} (Player influence: {playerInfluence:F2})");
+        }
+        
+        // Aplicar límite de velocidad máxima
+        if (currentSpeed > playerInfluence + maxSpeed)
+        {
+            currentSpeed = playerInfluence + maxSpeed;
+            
+            if (showDebugInfo)
+            {
+                Debug.Log($"🚀 Velocidad máxima alcanzada: {maxSpeed}");
+            }
+        }
+    }
 
-        // Movimiento
+    void MoveBackground()
+    {
         Vector3 movement = Vector3.up * currentSpeed * Time.deltaTime;
         bg1.Translate(movement);
         bg2.Translate(movement);
-
-        // Reacomodo infinito
-        if (bg1.position.y >= backgroundHeight)
-            bg1.position = new Vector3(bg1.position.x, bg2.position.y - backgroundHeight + 0.01f, bg1.position.z);
-
-        if (bg2.position.y >= backgroundHeight)
-            bg2.position = new Vector3(bg2.position.x, bg1.position.y - backgroundHeight + 0.01f, bg2.position.z);
     }
 
-    void OnDestroy()
+    void HandleInfiniteScroll()
     {
-        // Desuscribirse del evento para evitar memory leaks
-        if (playerController != null)
+        // Reposicionar bg1 si sale de pantalla
+        if (bg1.position.y >= backgroundHeight)
         {
-            playerController.OnPlayerCollision.RemoveListener(OnPlayerCollisionTriggered);
+            bg1.position = new Vector3(bg1.position.x, bg2.position.y - backgroundHeight + 0.01f, bg1.position.z);
+        }
+
+        // Reposicionar bg2 si sale de pantalla
+        if (bg2.position.y >= backgroundHeight)
+        {
+            bg2.position = new Vector3(bg2.position.x, bg1.position.y - backgroundHeight + 0.01f, bg2.position.z);
+        }
+    }
+
+    // Métodos públicos para control externo
+    public void SetSpeed(float newSpeed)
+    {
+        currentSpeed = Mathf.Clamp(newSpeed, 0f, maxSpeed);
+        
+        if (showDebugInfo)
+        {
+            Debug.Log($"⚡ Velocidad cambiada manualmente a: {currentSpeed}");
+        }
+    }
+
+    public void ResetSpeed()
+    {
+        UpdatePlayerVelocities();
+        currentSpeed = Mathf.Abs(playerCurrentVelocityY * currentVelocityMultiplier);
+        
+        if (currentSpeed < 0.5f)
+        {
+            currentSpeed = 1f;
+        }
+        
+        if (showDebugInfo)
+        {
+            Debug.Log($"🔄 Velocidad reiniciada a: {currentSpeed}");
+        }
+    }
+
+    public void SetMaxSpeed(float newMaxSpeed)
+    {
+        maxSpeed = newMaxSpeed;
+        
+        // Si la velocidad actual excede el nuevo máximo, ajustarla
+        if (currentSpeed > maxSpeed)
+        {
+            currentSpeed = maxSpeed;
+        }
+        
+        if (showDebugInfo)
+        {
+            Debug.Log($"🎯 Nueva velocidad máxima: {maxSpeed}");
+        }
+    }
+
+    // Getters para información del estado
+    public float GetCurrentSpeed() => currentSpeed;
+    public float GetMaxSpeed() => maxSpeed;
+    public bool IsAtMaxSpeed() => Mathf.Approximately(currentSpeed, maxSpeed);
+    
+    // Getters para las velocidades del player
+    public float GetPlayerCurrentVelocityY() => playerCurrentVelocityY;
+    public float GetPlayerLinearVelocityY() => playerLinearVelocityY;
+    
+    // Progreso hacia la velocidad máxima (0-1)
+    public float GetSpeedProgress() => currentSpeed / maxSpeed;
+    
+    // Método para usar linearVelocity en el futuro
+    public void UseLinearVelocityInfluence(bool enable)
+    {
+        if (enable)
+        {
+            // Aquí puedes agregar lógica para usar linearVelocity
+            float linearInfluence = Mathf.Abs(playerLinearVelocityY * linearVelocityMultiplier);
+            currentSpeed = Mathf.Max(currentSpeed, linearInfluence);
+            
+            if (showDebugInfo)
+            {
+                Debug.Log($"🔄 Usando LinearVelocity influence: {linearInfluence:F2}");
+            }
         }
     }
 }

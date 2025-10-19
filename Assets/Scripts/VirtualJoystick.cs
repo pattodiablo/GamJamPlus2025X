@@ -44,27 +44,6 @@ public class VirtualJoystick : MonoBehaviour, IPointerDownHandler, IPointerUpHan
     {
         isDragging = true;
 
-        // Usa el touchArea si está asignado; si no, el padre del background
-        var refRect = touchArea != null ? touchArea : (joystickBackground != null ? joystickBackground.parent as RectTransform : null);
-        if (joystickBackground != null && refRect != null &&
-            RectTransformUtility.ScreenPointToLocalPointInRectangle(refRect, eventData.position, eventData.pressEventCamera, out var localTouch))
-        {
-            // Convertir al espacio del padre del background
-            if (joystickBackground.parent == refRect)
-            {
-                joystickBackground.anchoredPosition = localTouch;
-            }
-            else
-            {
-                // Convertir desde refRect al espacio del padre real del background
-                Vector2 bgLocal;
-                RectTransformUtility.ScreenPointToLocalPointInRectangle(joystickBackground.parent as RectTransform, eventData.position, eventData.pressEventCamera, out bgLocal);
-                joystickBackground.anchoredPosition = bgLocal;
-            }
-        }
-
-        if (joystickHandle != null)
-            joystickHandle.anchoredPosition = Vector2.zero;
 
         // Genera input inmediato desde el primer toque
         OnDrag(eventData);

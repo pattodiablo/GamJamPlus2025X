@@ -1,6 +1,6 @@
 %YAML 1.1
 %TAG !u! tag:unity3d.com,2011:
---- !u!1001 &6350075103170447822
+--- !u!1001 &4190478884146772997
 PrefabInstance:
   m_ObjectHideFlags: 0
   serializedVersion: 2
@@ -52,20 +52,24 @@ PrefabInstance:
       propertyPath: m_LocalEulerAnglesHint.z
       value: 0
       objectReference: {fileID: 0}
+    - target: {fileID: 8805161600796041881, guid: 4b7a980a392e663479ea55b899b24a64, type: 3}
+      propertyPath: m_PlayOnAwake
+      value: 0
+      objectReference: {fileID: 0}
     m_RemovedComponents: []
     m_RemovedGameObjects: []
     m_AddedGameObjects: []
     m_AddedComponents: []
   m_SourcePrefab: {fileID: 100100000, guid: 4b7a980a392e663479ea55b899b24a64, type: 3}
---- !u!82 &2462845003875838807 stripped
-AudioSource:
-  m_CorrespondingSourceObject: {fileID: 8805161600796041881, guid: 4b7a980a392e663479ea55b899b24a64, type: 3}
-  m_PrefabInstance: {fileID: 6350075103170447822}
-  m_PrefabAsset: {fileID: 0}
---- !u!4 &7073924936200049450 stripped
+--- !u!4 &5573142452528865 stripped
 Transform:
   m_CorrespondingSourceObject: {fileID: 4194081510099098340, guid: 4b7a980a392e663479ea55b899b24a64, type: 3}
-  m_PrefabInstance: {fileID: 6350075103170447822}
+  m_PrefabInstance: {fileID: 4190478884146772997}
+  m_PrefabAsset: {fileID: 0}
+--- !u!82 &4617778984343330460 stripped
+AudioSource:
+  m_CorrespondingSourceObject: {fileID: 8805161600796041881, guid: 4b7a980a392e663479ea55b899b24a64, type: 3}
+  m_PrefabInstance: {fileID: 4190478884146772997}
   m_PrefabAsset: {fileID: 0}
 --- !u!1001 &7134522211620354329
 PrefabInstance:
@@ -136,7 +140,7 @@ PrefabInstance:
     m_AddedGameObjects:
     - targetCorrespondingSourceObject: {fileID: -7552582706839291426, guid: 9e78801466f1c4b2b977a515d57248bf, type: 3}
       insertIndex: -1
-      addedObject: {fileID: 7073924936200049450}
+      addedObject: {fileID: 5573142452528865}
     m_AddedComponents:
     - targetCorrespondingSourceObject: {fileID: -8653719598885068355, guid: 9e78801466f1c4b2b977a515d57248bf, type: 3}
       insertIndex: -1
@@ -241,7 +245,7 @@ MonoBehaviour:
   rotationSpeed: 20
   randomizeDirection: 1
   rayAnimationsPrefab: {fileID: 3709332779610727062, guid: 9cbe82551552f4732be857a957150de3, type: 3}
-  tomarBateria: {fileID: 2462845003875838807}
+  playerPWRup: {fileID: 4617778984343330460}
 --- !u!4 &8371413449272852679 stripped
 Transform:
   m_CorrespondingSourceObject: {fileID: -7552582706839291426, guid: 9e78801466f1c4b2b977a515d57248bf, type: 3}

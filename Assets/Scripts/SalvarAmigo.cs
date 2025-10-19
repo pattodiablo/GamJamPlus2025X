@@ -1,6 +1,7 @@
 using UnityEngine;
 using UnityEngine.UI;
 using TMPro;
+using System.Collections;
 
 public class SalvarAmigo : MonoBehaviour
 {
@@ -50,6 +51,9 @@ public class SalvarAmigo : MonoBehaviour
     private float destroyBottomY;
     private float destroyLeftX;
     private float destroyRightX;
+    [Header("SoundsAmigo")]
+    [SerializeField] private AudioSource audioThanks;
+    [SerializeField] private AudioSource audioHelp;
 
     void Awake()
     {
@@ -200,6 +204,8 @@ public class SalvarAmigo : MonoBehaviour
     {
         Debug.LogWarning("Va a sonar audio de spawn amigo");
         // AudioManager.Instance.PlaySound("AmigoSpawn");
+       Debug.LogWarning("Va a sonar audio de spawn amigo");
+        audioHelp.Play();
     }
 
     private void OnTriggerEnter2D(Collider2D other)
@@ -221,6 +227,8 @@ public class SalvarAmigo : MonoBehaviour
                 isRescued = true;
                 desaparecer();
             }
+            audioThanks.Play();
+            
         }
     }
     

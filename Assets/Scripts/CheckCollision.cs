@@ -3,10 +3,7 @@ using UnityEngine;
 
 public class CheckCollision : MonoBehaviour
 {
-    [Header("Audio Interacción Meteoro")]
-    [SerializeField] private AudioSource sfxBoom;
-    [SerializeField] private AudioSource playerHurt;
-    [SerializeField] private AudioSource npcFail;
+       
 
     // Start is called once before the first execution of Update after the MonoBehaviour is created
     public bool doExplosionOnCollision = false;
@@ -29,9 +26,7 @@ public class CheckCollision : MonoBehaviour
 
         if (other.CompareTag("Player"))
         {
-            sfxBoom.Play();
-            playerHurt.Play();
-
+            
             other.SendMessage("PlayerHurt", SendMessageOptions.DontRequireReceiver);
             if (doExplosionOnTrigger)
             {
@@ -56,7 +51,7 @@ public class CheckCollision : MonoBehaviour
             // No rescatado: destruir y (si quieres) explotar
             amigo.SendMessage("AmigoDestroy", SendMessageOptions.DontRequireReceiver);
             GetComponent<DoExplosion>()?.Explode(transform);
-            npcFail.Play();
+            
         }
     }
 

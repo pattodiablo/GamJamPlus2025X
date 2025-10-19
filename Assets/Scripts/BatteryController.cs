@@ -6,14 +6,16 @@ public class BatteryController : MonoBehaviour
     [SerializeField] private bool randomizeDirection = true;
 
     [SerializeField] private GameObject rayAnimationsPrefab; // <- Prefab de rayos a instanciar
-    [SerializeField] private AudioSource tomarBateria;
+    [SerializeField] private AudioSource playerPWRup;
 
     // 1 = horario (derecha), -1 = antihorario (izquierda)
     private int direction = 1;
+    private Rigidbody2D rb;
 
     // Start is called once before the first execution of Update after the MonoBehaviour is created
     void Start()
     {
+        rb = GetComponent<Rigidbody2D>();
         if (randomizeDirection)
             direction = Random.value < 0.5f ? -1 : 1;
     }
@@ -30,11 +32,12 @@ public class BatteryController : MonoBehaviour
 
             
         var energy = other.GetComponentInParent<PlayerController2D>(); // o tu script real
-        tomarBateria.Play();
+    
 
         if (energy != null)
         {
             energy.AddBattery(1); // ajusta al método real
+            playerPWRup.Play();
         }
 
         // Instanciar rayos antes de destruir
@@ -42,7 +45,19 @@ public class BatteryController : MonoBehaviour
         {
             Instantiate(rayAnimationsPrefab, transform.position, other.transform.rotation);
         }
+        playerPWRup.Play();
 
+        GetComponent<Collider2D>().enabled = false;
+
+        Invoke(nameof(DestroyDelayed), 0.5f);
+
+        
+
+
+    }
+    private void DestroyDelayed()
+    {
+          
         Destroy(gameObject);
     }
 }

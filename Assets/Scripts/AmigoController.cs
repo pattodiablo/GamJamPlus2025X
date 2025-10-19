@@ -20,6 +20,7 @@ public class AmigoController : MonoBehaviour
 
     private float startTime;
     private float spawnBudget; // Acumula “spawns fraccionarios” (método estable por frame)
+    
 
     void Start()
     {

@@ -1,6 +1,9 @@
+
 using UnityEngine;
 using UnityEngine.UI;
 using TMPro;
+
+
 public class SalvarAmigo : MonoBehaviour
 {
     public Animator animator;   
@@ -28,6 +31,29 @@ public class SalvarAmigo : MonoBehaviour
     private static int scoreCounter = 0;
 
     public GameObject Fondo;
+    public EnergyCounter energyCounter;
+
+    private int energyNumber;
+    [Header("Energy lookup")]
+    [SerializeField] private string canvasName = "UICanvas"; // opcional: nombre del Canvas
+    [SerializeField] private string canvasTag = "";          // opcional: tag del Canvas
+
+    void Awake()
+    {
+        if (energyCounter == null)
+        {
+            GameObject canvasGO = null;
+            if (!string.IsNullOrEmpty(canvasTag))
+                canvasGO = GameObject.FindWithTag(canvasTag);
+            if (canvasGO == null && !string.IsNullOrEmpty(canvasName))
+                canvasGO = GameObject.Find(canvasName);
+            if (canvasGO != null)
+                energyCounter = canvasGO.GetComponentInChildren<EnergyCounter>(true);
+
+            if (energyCounter == null)
+                energyCounter = FindObjectOfType<EnergyCounter>(true);
+        }
+    }
 
     void Start()
     {
@@ -66,18 +92,37 @@ public class SalvarAmigo : MonoBehaviour
 
         float yAng = transform.eulerAngles.y % 360f;
         rotatedY180 = Mathf.Abs(Mathf.DeltaAngle(yAng, 180f)) < 1f;
+
+         Invoke(nameof(PlaySpawnAudio), 4f);
+    }
+
+     private void PlaySpawnAudio()
+    {
+       Debug.LogWarning("Va a sonar audio de spawn amigo");
+        // AudioManager.Instance.PlaySound("AmigoSpawn");
     }
 
     private void OnTriggerEnter2D(Collider2D other)
     {
-        if (other.CompareTag("Player") && !isRescued)
+       
+        if (!other.CompareTag("Player")) return;
+
+        int energyValue = energyCounter != null ? energyCounter.currentEnergy : 0;
+        if (energyCounter == null)
+            Debug.LogWarning("EnergyCounter no encontrado. Asigna en la instancia en escena o ajusta canvasName/canvasTag.");
+
+        if (energyValue > 0)
         {
+             if (!isRescued)
+            {
             puntaje();
-            other.SendMessage("AddPoints", 100, SendMessageOptions.DontRequireReceiver);
+            
+            other.SendMessage("UseBattery", 1, SendMessageOptions.DontRequireReceiver);
             animator.SetBool("IsRecued", true);
             isRescued = true;
-            
             desaparecer();
+            }
+            
         }
     }
     
@@ -104,7 +149,7 @@ public class SalvarAmigo : MonoBehaviour
         // Actualizar el texto UI
         UpdatePuntuacionUI();
 
-        Debug.Log($"🎉 Amigo rescatado! Puntuación actual: {scoreCounter}");
+       // Debug.Log($"🎉 Amigo rescatado! Puntuación actual: {scoreCounter}");
     }
     
     void UpdatePuntuacionUI()
@@ -123,7 +168,7 @@ public class SalvarAmigo : MonoBehaviour
         }
         else
         {
-            Debug.LogWarning("⚠️ No hay componente de texto asignado para mostrar la puntuación");
+            //Debug.LogWarning("⚠️ No hay componente de texto asignado para mostrar la puntuación");
         }
     }
 }

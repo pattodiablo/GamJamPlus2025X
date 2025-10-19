@@ -25,9 +25,13 @@ public class BatteryController : MonoBehaviour
 
     private void OnTriggerEnter2D(Collider2D other)
     {
-        if (!other.CompareTag("Player")) return;
+   if (!other.CompareTag("Player")) return;
 
-        other.SendMessage("AddBattery", SendMessageOptions.DontRequireReceiver);
+        var energy = other.GetComponentInParent<PlayerController2D>(); // o tu script real
+        if (energy != null)
+        {
+            energy.AddBattery(1); // ajusta al método real
+        }
 
         // Instanciar rayos antes de destruir
         if (rayAnimationsPrefab != null)

@@ -39,6 +39,8 @@ public class PlayerController2D : MonoBehaviour
     private Vector3 initialPosition;
     private float floatTimer = 0f;
 
+    public EnergyCounter energyCounter;
+
     [Header("Movement Restriction")]
     public bool restrictYMovement = true;    // Si true, bloquea movimiento en Y
 
@@ -250,5 +252,21 @@ public class PlayerController2D : MonoBehaviour
     {
         // Aquí puedes agregar la lógica para sumar baterías al jugador
         UnityEngine.Debug.Log($"Baterías añadidas: {amount}");
+        if (energyCounter != null)
+        {
+            energyCounter.AddEnergy(amount);
+
+        }
+    }
+
+    public void UseBattery(int amount)
+    {
+        // Aquí puedes agregar la lógica para usar baterías del jugador
+        
+        if (energyCounter != null)
+        {
+            energyCounter.RemoveEnergy(amount);
+
+        }
     }
 }

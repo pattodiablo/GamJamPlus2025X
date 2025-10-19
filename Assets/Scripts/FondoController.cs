@@ -43,17 +43,17 @@ private float savedSpeedBeforeReverse;
         if (playerController != null)
         {
             playerController.OnPlayerCollision.AddListener(OnPlayerCollisionTriggered);
-            Debug.Log("✓ Suscrito al evento OnPlayerCollision del PlayerController");
+        
         }
         else
         {
-            Debug.LogError("❌ PlayerController no está asignado en FondoController!");
+      
             // Intentar encontrar el PlayerController automáticamente
             playerController = FindFirstObjectByType<PlayerController>();
             if (playerController != null)
             {
                 playerController.OnPlayerCollision.AddListener(OnPlayerCollisionTriggered);
-                Debug.Log("✓ PlayerController encontrado automáticamente y suscrito");
+            
             }
             else
             {
@@ -64,25 +64,25 @@ private float savedSpeedBeforeReverse;
 
     private void OnPlayerCollisionTriggered()
     {
-        Debug.Log("¡Evento OnPlayerCollision recibido!");
+        
         if (!isReversing)
         {
             isReversing = true;
             reverseTimer = 0f; // reinicia el timer
             savedSpeedBeforeReverse = currentSpeed;     // guarda la velocidad antes del cambio
-            Debug.Log($"Iniciando reverso. Velocidad guardada: {savedSpeedBeforeReverse:F2}");
+          
             currentSpeed *= reverseMultiplier;          // invierte la velocidad (por ejemplo, la hace negativa)
-            Debug.Log($"Velocidad después del reverso: {currentSpeed:F2}");
+        
         }
         else
         {
-            Debug.Log("Ya estaba en reverso, ignorando evento");
+          //  Debug.Log("Ya estaba en reverso, ignorando evento");
         }
     }
 
     void Update()
     {
-        Debug.Log($"Speed: {currentSpeed:F2}, IsReversing: {isReversing}, Timer: {reverseTimer:F2}");
+    
         lastSpeed = currentSpeed;
 
         // Lógica de finalización del reverso y aceleración normal
@@ -101,10 +101,10 @@ private float savedSpeedBeforeReverse;
             {
                 isReversing = false;
                 reverseTimer = 0f;
-                Debug.Log($"Reverso terminado. Velocidad antes: {savedSpeedBeforeReverse:F2}");
+           
                 // recupera la velocidad donde se quedó antes de la reversa
                 currentSpeed = savedSpeedBeforeReverse * 0.25f; // Reducción más drástica del 75%
-                Debug.Log($"Nueva velocidad después del reverso: {currentSpeed:F2}");
+             
             }
         }
 

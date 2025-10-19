@@ -32,7 +32,7 @@ public class PlayerController2D : MonoBehaviour
     private Vector2 inputVector = Vector2.zero;
     private Vector3 initialPosition;
     private float floatTimer = 0f;
-    
+
     void Start()
     {
         // Obtener componentes
@@ -41,15 +41,15 @@ public class PlayerController2D : MonoBehaviour
         {
             rb = gameObject.AddComponent<Rigidbody2D>();
         }
-        
+
         // Configurar Rigidbody2D para movimiento espacial
         rb.gravityScale = 0f; // Sin gravedad de Unity, usaremos la nuestra
         rb.linearDamping = 2f;         // Un poco de resistencia para hacer el movimiento más suave
         rb.angularDamping = 5f;  // Resistencia angular
-        
+
         // Guardar posición inicial para el efecto flotante
         initialPosition = transform.position;
-        
+
         // Si no se asignó joystick, intentar encontrarlo
         if (virtualJoystick == null)
         {
@@ -67,6 +67,12 @@ public class PlayerController2D : MonoBehaviour
         }
     }
     
+    void PlayerHurt()
+    {
+      
+        // Aquí puedes manejar lo que sucede cuando el jugador es herido
+        UnityEngine.Debug.Log("Player has been hurt!"); 
+    }
     void Update()
     {
         // Obtener input del joystick virtual

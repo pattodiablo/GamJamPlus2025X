@@ -239,10 +239,16 @@ public class PlayerController2D : MonoBehaviour
     {
         return currentVelocity;
     }
-    
+
     // Método para verificar si el player se está moviendo
     public bool IsMoving()
     {
         return currentVelocity.magnitude > 0.1f;
+    }
+
+    public void AddBattery(int amount)
+    {
+        // Aquí puedes agregar la lógica para sumar baterías al jugador
+        UnityEngine.Debug.Log($"Baterías añadidas: {amount}");
     }
 }

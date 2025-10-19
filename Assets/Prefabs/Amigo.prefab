@@ -90,6 +90,77 @@ SpriteRenderer:
   m_WasSpriteAssigned: 1
   m_MaskInteraction: 0
   m_SpriteSortPoint: 0
+--- !u!1001 &3228482527084721414
+PrefabInstance:
+  m_ObjectHideFlags: 0
+  serializedVersion: 2
+  m_Modification:
+    serializedVersion: 3
+    m_TransformParent: {fileID: 8910879894367803301}
+    m_Modifications:
+    - target: {fileID: 6047577225569597577, guid: 6e41639c2dcb3cc4180519495a42da43, type: 3}
+      propertyPath: m_LocalPosition.x
+      value: 0.09000793
+      objectReference: {fileID: 0}
+    - target: {fileID: 6047577225569597577, guid: 6e41639c2dcb3cc4180519495a42da43, type: 3}
+      propertyPath: m_LocalPosition.y
+      value: 1.2100024
+      objectReference: {fileID: 0}
+    - target: {fileID: 6047577225569597577, guid: 6e41639c2dcb3cc4180519495a42da43, type: 3}
+      propertyPath: m_LocalPosition.z
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 6047577225569597577, guid: 6e41639c2dcb3cc4180519495a42da43, type: 3}
+      propertyPath: m_LocalRotation.w
+      value: 1
+      objectReference: {fileID: 0}
+    - target: {fileID: 6047577225569597577, guid: 6e41639c2dcb3cc4180519495a42da43, type: 3}
+      propertyPath: m_LocalRotation.x
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 6047577225569597577, guid: 6e41639c2dcb3cc4180519495a42da43, type: 3}
+      propertyPath: m_LocalRotation.y
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 6047577225569597577, guid: 6e41639c2dcb3cc4180519495a42da43, type: 3}
+      propertyPath: m_LocalRotation.z
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 6047577225569597577, guid: 6e41639c2dcb3cc4180519495a42da43, type: 3}
+      propertyPath: m_LocalEulerAnglesHint.x
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 6047577225569597577, guid: 6e41639c2dcb3cc4180519495a42da43, type: 3}
+      propertyPath: m_LocalEulerAnglesHint.y
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 6047577225569597577, guid: 6e41639c2dcb3cc4180519495a42da43, type: 3}
+      propertyPath: m_LocalEulerAnglesHint.z
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 7822771004062436612, guid: 6e41639c2dcb3cc4180519495a42da43, type: 3}
+      propertyPath: m_Name
+      value: npcThanksAudio
+      objectReference: {fileID: 0}
+    - target: {fileID: 7822771004062436612, guid: 6e41639c2dcb3cc4180519495a42da43, type: 3}
+      propertyPath: m_IsActive
+      value: 1
+      objectReference: {fileID: 0}
+    m_RemovedComponents: []
+    m_RemovedGameObjects: []
+    m_AddedGameObjects: []
+    m_AddedComponents: []
+  m_SourcePrefab: {fileID: 100100000, guid: 6e41639c2dcb3cc4180519495a42da43, type: 3}
+--- !u!82 &3826880948904942679 stripped
+AudioSource:
+  m_CorrespondingSourceObject: {fileID: 1861693304161233233, guid: 6e41639c2dcb3cc4180519495a42da43, type: 3}
+  m_PrefabInstance: {fileID: 3228482527084721414}
+  m_PrefabAsset: {fileID: 0}
+--- !u!4 &9160480732888550799 stripped
+Transform:
+  m_CorrespondingSourceObject: {fileID: 6047577225569597577, guid: 6e41639c2dcb3cc4180519495a42da43, type: 3}
+  m_PrefabInstance: {fileID: 3228482527084721414}
+  m_PrefabAsset: {fileID: 0}
 --- !u!1001 &7819964218331065979
 PrefabInstance:
   m_ObjectHideFlags: 0
@@ -164,6 +235,9 @@ PrefabInstance:
     - targetCorrespondingSourceObject: {fileID: -7552582706839291426, guid: 161afbe61e42944508079955c721efb8, type: 3}
       insertIndex: 0
       addedObject: {fileID: 1666035566086029961}
+    - targetCorrespondingSourceObject: {fileID: -7552582706839291426, guid: 161afbe61e42944508079955c721efb8, type: 3}
+      insertIndex: -1
+      addedObject: {fileID: 9160480732888550799}
     m_AddedComponents:
     - targetCorrespondingSourceObject: {fileID: -8653719598885068355, guid: 161afbe61e42944508079955c721efb8, type: 3}
       insertIndex: -1
@@ -292,7 +366,11 @@ MonoBehaviour:
   m_EditorClassIdentifier: '::'
   animator: {fileID: 7000888980537488669}
   disappearHorizontalSpeed: 0.5
-  magicShield: {fileID: 5769946650511020920}
+  salvarSoundAmigo: {fileID: 3826880948904942679}
+  magicShield: {fileID: 7822771004062436612, guid: 6e41639c2dcb3cc4180519495a42da43, type: 3}
+  isRescued: 0
+  spawnSoundAmigo: {fileID: 0}
+  delayPlay: 3
 --- !u!4 &8910879894367803301 stripped
 Transform:
   m_CorrespondingSourceObject: {fileID: -7552582706839291426, guid: 161afbe61e42944508079955c721efb8, type: 3}

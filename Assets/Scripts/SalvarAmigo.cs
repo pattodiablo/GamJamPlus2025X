@@ -5,6 +5,8 @@ public class SalvarAmigo : MonoBehaviour
     public Animator animator;   
     [SerializeField] private float disappearHorizontalSpeed = 0.5f;
 
+    [Header("Audio Salvar Amigo")]
+    [SerializeField] private AudioSource salvarSoundAmigo;
 
     private Rigidbody2D rb;
 
@@ -12,6 +14,7 @@ public class SalvarAmigo : MonoBehaviour
     private bool rotatedY180;
 
     public bool isRescued = false;
+
 
     void Start()
     {
@@ -36,6 +39,7 @@ public class SalvarAmigo : MonoBehaviour
             other.SendMessage("AddPoints", 100, SendMessageOptions.DontRequireReceiver);
             animator.SetBool("IsRecued", true);
             isRescued = true;
+            salvarSoundAmigo.Play();
             
             desaparecer();
         }

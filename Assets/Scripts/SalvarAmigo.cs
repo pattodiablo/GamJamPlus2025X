@@ -2,6 +2,7 @@
 using UnityEngine;
 using UnityEngine.UI;
 using TMPro;
+using System.Collections;
 
 
 public class SalvarAmigo : MonoBehaviour
@@ -37,6 +38,10 @@ public class SalvarAmigo : MonoBehaviour
     [Header("Energy lookup")]
     [SerializeField] private string canvasName = "UICanvas"; // opcional: nombre del Canvas
     [SerializeField] private string canvasTag = "";          // opcional: tag del Canvas
+
+    [Header("SoundsAmigo")]
+    [SerializeField] private AudioSource audioThanks;
+    [SerializeField] private AudioSource audioHelp;
 
     void Awake()
     {
@@ -99,7 +104,7 @@ public class SalvarAmigo : MonoBehaviour
      private void PlaySpawnAudio()
     {
        Debug.LogWarning("Va a sonar audio de spawn amigo");
-        // AudioManager.Instance.PlaySound("AmigoSpawn");
+        audioHelp.Play();
     }
 
     private void OnTriggerEnter2D(Collider2D other)
@@ -122,6 +127,7 @@ public class SalvarAmigo : MonoBehaviour
             isRescued = true;
             desaparecer();
             }
+            audioThanks.Play();
             
         }
     }

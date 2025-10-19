@@ -41,7 +41,7 @@ public class PlayerController : MonoBehaviour
     {
         originalRotation = transform.rotation;
         CalculateSceneLimits();
-        Debug.Log($"Scene Limits - X: {sceneLimitX}, Y: {sceneLimitY}");
+   
     }
 
     void Update()
@@ -125,7 +125,7 @@ public class PlayerController : MonoBehaviour
             collided = true;
             direction = 1f; // choca a la derecha → gira a la izquierda
             bounceDirection = Vector3.left; // rebota hacia la izquierda
-            Debug.Log("Colisión HORIZONTAL - Derecha");
+           
         }
         else if (transform.position.x < -limitX)
         {
@@ -133,7 +133,7 @@ public class PlayerController : MonoBehaviour
             collided = true;
             direction = -1f; // choca a la izquierda → gira a la derecha
             bounceDirection = Vector3.right; // rebota hacia la derecha
-            Debug.Log("Colisión HORIZONTAL - Izquierda");
+       
         }
 
         // Comprobación vertical
@@ -143,7 +143,7 @@ public class PlayerController : MonoBehaviour
             collided = true;
             direction = 1f; // para efectos visuales
             bounceDirection = Vector3.down; // rebota hacia abajo
-            Debug.Log("Colisión VERTICAL - Arriba");
+        
         }
         else if (transform.position.y < -limitY)
         {
@@ -151,7 +151,7 @@ public class PlayerController : MonoBehaviour
             collided = true;
             direction = -1f; // para efectos visuales
             bounceDirection = Vector3.up; // rebota hacia arriba
-            Debug.Log("Colisión VERTICAL - Abajo");
+          
         }
 
         if (collided && !isSpinning)
@@ -159,7 +159,7 @@ public class PlayerController : MonoBehaviour
             // Aplicar rebote
             ApplyBounce(bounceDirection);
             
-            Debug.Log("🔥 Disparando evento OnPlayerCollision");
+          
             OnPlayerCollision?.Invoke(); // dispara el evento
           //  StartCoroutine(SpinEffect(direction));
         }
@@ -170,7 +170,7 @@ public class PlayerController : MonoBehaviour
         bounceVelocity = direction * bounceForce;
         bounceTimer = bounceDuration;
         isBouncing = true;
-        Debug.Log($"💥 Rebote aplicado: {direction} con fuerza {bounceForce}");
+       
     }
 
     private System.Collections.IEnumerator SpinEffect(float direction)

@@ -14,6 +14,9 @@ public class VirtualJoystick : MonoBehaviour, IPointerDownHandler, IPointerUpHan
     
     [Header("Output")]
     public Vector2 inputVector = Vector2.zero; // Vector de entrada (-1 a 1 en X e Y)
+
+    [Header("Touch Area")]
+    [SerializeField] private RectTransform touchArea; // Panel full-screen que recibe los toques
     
     private bool isDragging = false;
     private Vector2 centerPosition;
@@ -40,6 +43,10 @@ public class VirtualJoystick : MonoBehaviour, IPointerDownHandler, IPointerUpHan
     public void OnPointerDown(PointerEventData eventData)
     {
         isDragging = true;
+
+       
+
+        // Genera input inmediato desde el primer toque
         OnDrag(eventData);
     }
     

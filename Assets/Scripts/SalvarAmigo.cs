@@ -1,12 +1,12 @@
+
 using UnityEngine;
+
 
 public class SalvarAmigo : MonoBehaviour
 {
     public Animator animator;   
     [SerializeField] private float disappearHorizontalSpeed = 0.5f;
 
-    [Header("Audio Salvar Amigo")]
-    [SerializeField] private AudioSource salvarSoundAmigo;
 
     private Rigidbody2D rb;
 
@@ -15,6 +15,29 @@ public class SalvarAmigo : MonoBehaviour
 
     public bool isRescued = false;
 
+    public EnergyCounter energyCounter;
+
+    private int energyNumber;
+    [Header("Energy lookup")]
+    [SerializeField] private string canvasName = "UICanvas"; // opcional: nombre del Canvas
+    [SerializeField] private string canvasTag = "";          // opcional: tag del Canvas
+
+    void Awake()
+    {
+        if (energyCounter == null)
+        {
+            GameObject canvasGO = null;
+            if (!string.IsNullOrEmpty(canvasTag))
+                canvasGO = GameObject.FindWithTag(canvasTag);
+            if (canvasGO == null && !string.IsNullOrEmpty(canvasName))
+                canvasGO = GameObject.Find(canvasName);
+            if (canvasGO != null)
+                energyCounter = canvasGO.GetComponentInChildren<EnergyCounter>(true);
+
+            if (energyCounter == null)
+                energyCounter = FindObjectOfType<EnergyCounter>(true);
+        }
+    }
 
     void Start()
     {
@@ -30,17 +53,30 @@ public class SalvarAmigo : MonoBehaviour
 
         float yAng = transform.eulerAngles.y % 360f;
         rotatedY180 = Mathf.Abs(Mathf.DeltaAngle(yAng, 180f)) < 1f;
+
+         Invoke(nameof(PlaySpawnAudio), 4f);
+    }
+
+     private void PlaySpawnAudio()
+    {
+       Debug.LogWarning("Va a sonar audio de spawn amigo");
+        // AudioManager.Instance.PlaySound("AmigoSpawn");
     }
 
     private void OnTriggerEnter2D(Collider2D other)
     {
-        if (other.CompareTag("Player"))
+        if (!other.CompareTag("Player")) return;
+
+        int energyValue = energyCounter != null ? energyCounter.currentEnergy : 0;
+        if (energyCounter == null)
+            Debug.LogWarning("EnergyCounter no encontrado. Asigna en la instancia en escena o ajusta canvasName/canvasTag.");
+
+        if (energyValue > 0)
         {
             other.SendMessage("AddPoints", 100, SendMessageOptions.DontRequireReceiver);
+            other.SendMessage("UseBattery", 1, SendMessageOptions.DontRequireReceiver);
             animator.SetBool("IsRecued", true);
             isRescued = true;
-            salvarSoundAmigo.Play();
-            
             desaparecer();
         }
     }
@@ -53,10 +89,10 @@ public class SalvarAmigo : MonoBehaviour
         GameObject.Destroy(gameObject, 0f);
     }
     void desaparecer()
-    {   
-               magicShield.SetActive(true);
+    {
+        if (magicShield != null) magicShield.SetActive(true);
         if (rb == null) rb = GetComponent<Rigidbody2D>();
-        float dir = rotatedY180 ? -1f : 1f; // 180° → izquierda, 0° → derecha
-        rb.linearVelocity = new Vector2(dir * disappearHorizontalSpeed, rb.linearVelocity.y);
+        float dir = rotatedY180 ? -1f : 1f;
+        rb.linearVelocity = new Vector2(dir * disappearHorizontalSpeed, rb.linearVelocity.y); // FIX: velocity
     }   
 }

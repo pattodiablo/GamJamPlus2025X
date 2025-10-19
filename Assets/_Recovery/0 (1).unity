@@ -1160,10 +1160,10 @@ PrefabInstance:
       addedObject: {fileID: 1936448929}
     - targetCorrespondingSourceObject: {fileID: 3606628657772372144, guid: a7d3fa857b0104665b8b2a76f5c5c958, type: 3}
       insertIndex: -1
-      addedObject: {fileID: 1936448933}
+      addedObject: {fileID: 1936448935}
     - targetCorrespondingSourceObject: {fileID: 3606628657772372144, guid: a7d3fa857b0104665b8b2a76f5c5c958, type: 3}
       insertIndex: -1
-      addedObject: {fileID: 1936448932}
+      addedObject: {fileID: 1936448934}
   m_SourcePrefab: {fileID: 100100000, guid: a7d3fa857b0104665b8b2a76f5c5c958, type: 3}
 --- !u!1 &1936448928 stripped
 GameObject:
@@ -1263,7 +1263,7 @@ MonoBehaviour:
   minScale: {x: 0.1, y: 0.2, z: 1}
   maxScale: {x: 0.8, y: 0.7, z: 1}
   showDebugInfo: 1
---- !u!114 &1936448932
+--- !u!114 &1936448934
 MonoBehaviour:
   m_ObjectHideFlags: 0
   m_CorrespondingSourceObject: {fileID: 0}
@@ -1275,8 +1275,8 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 6f4cfe69ba9654b648124bf679d6bcd1, type: 3}
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::DoExplosion
-  explodePrefab: {fileID: 0}
---- !u!114 &1936448933
+  explodePrefab: {fileID: 846857919778172722, guid: cee19feb0082b422cba13f87a179067c, type: 3}
+--- !u!114 &1936448935
 MonoBehaviour:
   m_ObjectHideFlags: 0
   m_CorrespondingSourceObject: {fileID: 0}

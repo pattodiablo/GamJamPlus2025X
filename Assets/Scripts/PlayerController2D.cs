@@ -145,7 +145,7 @@ public class PlayerController2D : MonoBehaviour
     {
     
         // Limitar la posición vertical para evitar que se salga demasiado
-        float limitY = 2f; // Ajustar según el tamaño del mundo
+        float limitY = 4.5f; // Ajustar según el tamaño del mundo
         if (transform.position.y > limitY)
         {
             transform.position = new Vector3(transform.position.x, limitY, transform.position.z);

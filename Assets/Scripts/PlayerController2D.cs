@@ -41,6 +41,8 @@ public class PlayerController2D : MonoBehaviour
 
     public EnergyCounter energyCounter;
 
+    public VidaController vidaController;
+
     [Header("Movement Restriction")]
     public bool restrictYMovement = true;    // Si true, bloquea movimiento en Y
 
@@ -95,6 +97,10 @@ public class PlayerController2D : MonoBehaviour
         animator.SetBool(hitBoolParam, true);
         hitRoutine = StartCoroutine(ClearHitFlagAfter(hitFlagTime));
 
+        if (vidaController != null)
+        {
+            vidaController.RestarVida(1);
+        }
     }
 
     private IEnumerator ClearHitFlagAfter(float delay)
